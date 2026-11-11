@@ -20,7 +20,7 @@ class TransferActivity : AppCompatActivity() {
         listBtn.setOnClickListener { result.text = ProjectStore(this).list().joinToString("\n") { "${it.name} — ${it.lastStatus}" }.ifEmpty { "Abhi koi project nahi hai." } }
         shareBtn.setOnClickListener {
             val apk = File(getExternalFilesDir(null), "codex-app.apk")
-            if (!apk.exists()) { Toast.makeText(this, "APK abhi is phone me nahi hai. Pehle cloud build se APK download karo.", Toast.LENGTH_LONG).show(); return }
+            if (!apk.exists()) { Toast.makeText(this, "APK abhi is phone me nahi hai. Pehle cloud build se APK download karo.", Toast.LENGTH_LONG).show(); return@setOnClickListener }
             val uri = FileProvider.getUriForFile(this, "com.raj.codex.fileprovider", apk)
             val intent = Intent(Intent.ACTION_SEND).apply { type = "application/vnd.android.package-archive"; putExtra(Intent.EXTRA_STREAM, uri); addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
             startActivity(Intent.createChooser(intent, "Transfer APK — dusre phone ko bhejo"))
