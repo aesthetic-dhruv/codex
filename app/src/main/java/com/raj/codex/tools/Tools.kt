@@ -3,8 +3,8 @@ import java.io.File
 object FileTools {
     fun read(root: File, rel: String): String { val f = File(root, rel); require(com.raj.codex.security.PathGuard.isSafe(root.path, rel)) { "Unsafe path" }; return f.readText() }
     fun write(root: File, rel: String, content: String) { val f = File(root, rel); require(com.raj.codex.security.PathGuard.isSafe(root.path, rel)) { "Unsafe path" }; f.parentFile?.mkdirs(); f.writeText(content) }
-    fun list(root: File): List<String> = root.walkTopDown().filter { it.isFile }.take(500).map { it.relativeTo(root).path }
-    fun search(root: File, query: String): List<String> = root.walkTopDown().filter { it.isFile && it.length() < 200_000 }.filter { runCatching { it.readText().contains(query, ignoreCase = true) }.getOrDefault(false) }.take(50).map { it.relativeTo(root).path }
+    fun list(root: File): List<String> = root.walkTopDown().filter { it.isFile }.take(500).map { it.relativeTo(root).path }.toList()
+    fun search(root: File, query: String): List<String> = root.walkTopDown().filter { it.isFile && it.length() < 200_000 }.filter { runCatching { it.readText().contains(query, ignoreCase = true) }.getOrDefault(false) }.take(50).map { it.relativeTo(root).path }.toList()
     /** Targeted replace, never whole-file rewrite unless needed. */
     fun patch(root: File, rel: String, old: String, new: String): Boolean { val t = read(root, rel); if (!t.contains(old)) return false; write(root, rel, t.replace(old, new)); return true }
 }
